@@ -12,20 +12,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var dbUrl =
   '<url from mLab>';
 
-var messages = [
-  { name: 'Tim', message: 'Hey!' },
-  { name: 'Jim', message: 'Wassup!?' }
-];
+var Message = mongoose.model('Message', { name: String, message: String });
 
 app.get('/messages', (req, res) => {
-  res.send(messages);
+  Message.find({}, (err, messages) => {
+    res.send(messages);
+  });
 });
 
 app.post('/messages', (req, res) => {
   // console.log(req.body);
-  messages.push(req.body);
-  io.emit('message', req.body);
-  res.sendStatus(200);
+  var message = new Message(req.body);
+
+  message.save(err => {
+    if (err) res.sendStatus(500);
+
+    io.emit('message', req.body);
+    res.sendStatus(200);
+  });
 });
 
 io.on('connection', socket => {
