@@ -24,7 +24,7 @@
     ></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var scoket = io();
+      var socket = io();
 
       $(() => {
         // console.log('Page Loaded');
@@ -39,6 +39,8 @@
         getMessages();
         // addMessages({ name: 'Tim', message: 'Hello' });
       });
+
+      socket.on('message', addMessages);
 
       function addMessages(message) {
         $('#messages').append(
