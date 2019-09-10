@@ -9,7 +9,7 @@ app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var dbUrl = '<url from mLab>';
+var dbUrl = '<mLab url>';
 
 var Message = mongoose.model('Message', { name: String, message: String });
 
@@ -26,6 +26,12 @@ app.post('/messages', (req, res) => {
   message.save(err => {
     if (err) res.sendStatus(500);
 
+    Message.findOne({ message: 'badword' }, (err, censored) => {
+      if (censored) console.log('censored word found', censored);
+      Message.remove({ _id: censored.id }, err => {
+        console.log('removed censored message');
+      });
+    });
     io.emit('message', req.body);
     res.sendStatus(200);
   });
