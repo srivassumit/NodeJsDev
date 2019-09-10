@@ -21,3 +21,20 @@ describe('get messages', () => {
     });
   });
 });
+
+describe('get messages from user', () => {
+  it('should return 200 Ok', done => {
+    request.get('http://localhost:3000/messages/Tim', (err, res) => {
+      expect(res.statusCode).toEqual(200);
+      done();
+    });
+  });
+
+  it('anem should be tim', done => {
+    request.get('http://localhost:3000/messages/Tim', (err, res) => {
+      expect(JSON.parse(res.body).length).toBeGreaterThan(0);
+      expect(JSON.parse(res.body)[0].name).toEqual('Tim');
+      done();
+    });
+  });
+});
