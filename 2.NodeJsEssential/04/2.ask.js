@@ -6,6 +6,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// method that asks a question and expects an answer
 rl.question('What is Love?\nA: ', answer => {
   // answer = Baby don't hurt me
   console.log(`Your answer: ${answer}`);
